@@ -16,8 +16,29 @@ var uiController = (function(){
         },
         getDOMstrings: function(){
             return DOMstrings;
+        },
+
+        addListItem: function(item, type) {
+          // Orlogo zarlagiin elementiig aguulsan html-iig beltgene.
+          var html, list;
+    
+          if(type === 'inc') {
+            list = '.income__list';
+            html = '<div class="item clearfix" id="income-%id%"><div class="item__description">$$DESCRIPTION$$</div><div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+          } else{
+            list = ".expenses__list";
+            html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">$$DESCRIPTION$$</div><div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+
+          }
+          // Ter HTMl gotroo orlogo zarlagiin utguudiig REPLACE ashiglaj oorjchilj orgo
+          html=html.replace('%id%', item.id);
+          html = html.replace('$$DESCRIPTION$$', item.description);
+          html=html.replace("$$VALUE$$", item.value);
+          // Beltegesen HTML ee DOM ruu hiij ogno.
+          document.querySelector(list).insertAdjacentHTML('beforeend', html);
+
         }
-    }
+    };
 })();
 
 
@@ -62,6 +83,7 @@ return {
       item = new Expense(id, desc, val);
     }
    data.items[type].push(item);
+   return item;
   },
   seeData: function(){
   return data;
@@ -82,9 +104,9 @@ var appController = (function(uiController, financeController){
  
     
     //   2. Olj absan ogogdluudee sanhuugiin controllert damjuulj tend hadgalna.
-      financeController.addItem(input.type, input.description, input.value);
+      var item = financeController.addItem(input.type, input.description, input.value);
     //   3. Olj absan ogogduluudee web deeree tohiroh hesegt ni gargana (expense, income deer gargana)
-
+ uiController.addListItem(item, input.type);
     //  4. Tosbiig tootsoolno
 
     //  5. Etssiin uldegdel, tootsoog delgetsend gargana.
@@ -102,7 +124,7 @@ var appController = (function(uiController, financeController){
             ctrlAddItem();
            }
   });
-}
+};
 
   return {
       init: function(){
