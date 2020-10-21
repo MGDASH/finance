@@ -49,6 +49,15 @@ var uiController = (function(){
 
         document.querySelector(DOMstrings.dateLabel).textContent = unuudur.getFullYear() + " year "  + unuudur.getMonth() + " monthly ";
       },
+      changeType: function(){
+        var fields = document.querySelectorAll(DOMstrings.inputType + ', ' + DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+
+        nodeListForeach(fields, function(el){
+          el.classList.toggle('red-focus');
+        });
+        window.document.querySelector(DOMstrings.addBtn).classList.toggle("red");
+        // window.location = "http://1234.mn";
+        },
         getInput: function(){
             return {
                 type: document.querySelector(DOMstrings.inputType).value, // exp, inc
@@ -293,18 +302,23 @@ var updateTusuv = function(){
    
 };
   var setupEventListeners = function () {
+    //tobchin deer
     var DOM= uiController.getDOMstrings();
     document.querySelector(DOM.addBtn).addEventListener('click', function(){
         ctrlAddItem();
     
        });
     
+       //enter darahad ...
        document.addEventListener('keypress', function(event){
            if(event.keyCode===13 || event.which ===13) {
             ctrlAddItem();
            }
   });
 
+  document.querySelector(DOM.inputType).addEventListener('change', uiController.changeType);
+
+  //ustaghad bvh event listner barij abdag
   document.querySelector(DOM.containerDiv).addEventListener('click', function(event){
     var id = event.target.parentNode.parentNode.parentNode.parentNode.id;
     if(id){
